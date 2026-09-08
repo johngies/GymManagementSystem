@@ -1,5 +1,10 @@
 package com.gym.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.gym.dto.SubscriptionRequest;
 import com.gym.dto.SubscriptionResponse;
 import com.gym.entity.Member;
@@ -8,11 +13,8 @@ import com.gym.exception.DuplicateResourceException;
 import com.gym.exception.InvalidOperationException;
 import com.gym.exception.ResourceNotFoundException;
 import com.gym.repository.SubscriptionRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
