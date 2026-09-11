@@ -1,5 +1,8 @@
 # Gym Management System API
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Swagger%20UI-brightgreen.svg)](http://63.180.3.240:8081/swagger-ui/index.html)
+[![AWS](https://img.shields.io/badge/AWS-EC2%20%2B%20RDS-orange.svg)](https://aws.amazon.com/)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-johngies-blue.svg)](https://hub.docker.com/r/johngies/gym-management-system)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue.svg)](https://www.postgresql.org/)
@@ -9,9 +12,14 @@
 
 A production-ready RESTful backend service built with **Spring Boot 3.3** and **Java 21** for managing gym memberships, personal trainers, scheduled group classes, and automated booking capacity enforcement.
 
+**Live Interactive API Documentation (Swagger UI)**: [http://63.180.3.240:8081/swagger-ui/index.html](http://63.180.3.240:8081/swagger-ui/index.html)
+
+**Public Docker Image**: `docker pull johngies/gym-management-system:latest`
+
 ---
 
 ## Table of Contents
+- [Live Cloud Deployment](#live-cloud-deployment)
 - [Overview](#overview)
 - [Key Features and Business Rules](#key-features-and-business-rules)
 - [Architecture and Tech Stack](#architecture-and-tech-stack)
@@ -23,6 +31,35 @@ A production-ready RESTful backend service built with **Spring Boot 3.3** and **
 - [cURL Verification Workflow](#curl-verification-workflow)
 - [Automated Testing](#automated-testing)
 - [Future Roadmap (v2.0)](#future-roadmap-v20)
+
+---
+
+## Live Cloud Deployment
+
+The application is deployed live in production on **Amazon Web Services (AWS)**:
+* **Application Server**: AWS EC2 (`t3.micro` running Ubuntu 26.04 LTS), tuned with a 2GB Linux swapfile and JVM constraints (`-Xmx384m -Xms256m`).
+* **Database**: AWS RDS managed PostgreSQL 16 (`db.t4g.micro` Graviton2) instance running automated Flyway schema migrations.
+* **Containerization**: Pulled directly from Docker Hub (`johngies/gym-management-system:latest`) and executed by a non-root system user.
+
+```mermaid
+flowchart TD
+    Client["Client / Recruiter Browser"]
+    subgraph AWS["AWS Cloud (Frankfurt eu-central-1)"]
+        subgraph EC2["AWS EC2 Server (t3.micro)"]
+            Swap["2GB Linux Swapfile"]
+            subgraph Docker["Docker Container (gymuser)"]
+                JVM["Eclipse Temurin 21 JRE (-Xmx384m)"]
+                App["Spring Boot REST API (Port 8081)"]
+                Swagger["SpringDoc OpenAPI / Swagger UI"]
+            end
+        end
+        subgraph RDS["AWS RDS Managed Database"]
+            DB[("PostgreSQL 16 - db.t4g.micro (gym_db, Port 5432)")]
+        end
+    end
+    Client -->|HTTP :8081| App
+    App -->|JDBC :5432| DB
+```
 
 ---
 
